@@ -6,9 +6,10 @@ const MaxNum = 99
 
 func Convert(number int) (string, error) {
 
-	if number < 0 || number > MaxNum {
-		return "", fmt.Errorf("Number out of range")
+	if number < -MaxNum || number > MaxNum {
+		return "", fmt.Errorf("number out of range")
 	}
+
 	ones := []string{
 		"zero",
 		"one",
@@ -43,13 +44,24 @@ func Convert(number int) (string, error) {
 		"ninety",
 	}
 
+	if number < 0 {
+		number = -number
+		if number < 20 {
+			return "minus " + ones[number], nil
+		}
+		if number%10 == 0 {
+			return "minus " + tens[number/10-2], nil
+		}
+		return "minus " + tens[number/10-2] + " " + ones[number%10], nil
+	}
+
 	if number < 20 {
 		return ones[number], nil
 	}
 
 	if number%10 == 0 {
-		return tens[(number/10)-2], nil
+		return tens[number/10-2], nil
 	}
 
-	return tens[(number/10)-2] + " " + ones[number%10], nil
+	return tens[number/10-2] + " " + ones[number%10], nil
 }
